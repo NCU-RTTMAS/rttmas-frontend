@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+main {
+    /* height: calc(100vh-50px) !important; */
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    left: 250px;
+    right: 0;
+    overflow-y: auto;
+}
+
+th, td {
+    padding: 5px 10px;
+    text-align: start;
+    border: 1px solid rgba(0, 0, 0, .1);
+}
+
+th {
+    background-color: #f4f4f4;
+}
+td {
+    background-color: white;
+}
