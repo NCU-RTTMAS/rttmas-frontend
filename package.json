@@ -9,8 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@primevue/themes": "^4.2.2",
+    "@turf/turf": "^7.1.0",
+    "axios": "^1.7.7",
+    "kalman-filter": "^2.3.0",
     "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
     "pinia": "^2.1.7",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.2.2",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5"
   },
