@@ -196,7 +196,13 @@ const updateForObject = (identifier, object) => {
     let color = getRandomColor()
 
     for (let [reportTime, report] of Object.entries(object.pathHistory)) {
-        const waypoint = [report.latitude, report.longitude]
+        let waypoint;
+        
+        if (object.type == 1)
+            waypoint = [report.latitude, report.longitude]
+        else
+            waypoint = [report[0].latitude, report[0].longitude]
+
         waypoints.push(waypoint)
         
         object.mapNodes[reportTime] = L.circle(waypoint, {
@@ -207,8 +213,12 @@ const updateForObject = (identifier, object) => {
         })
         .bindPopup(`Object: ${identifier}<br>Time: ${reportTime}<br>Latitude: ${report.latitude}<br>Longitude: ${report.longitude}<br>Speed: ${report.speed} km/h<br>Heading: ${report.heading}`)
 
-        if (previousWaypoint != null)
+        if (previousWaypoint != null) {
+            // const a = L.latLng(waypoint[0], waypoint[1])
+            // const b = L.latLng(previousWaypoint[0], previousWaypoint[1])
+            // if (a.distanceTo(b) <= 150.0)
             object.mapLines[reportTime] = L.polyline([previousWaypoint, waypoint], { color: color })
+        }
         else
             object.mapLines[reportTime] = null
         
@@ -231,8 +241,12 @@ const getRandomColor = () => {
 
 const getMap = () => map
 
+const addToMap = (target) => {
+    target.addTo(map)
+}
+
 defineExpose({
-  initMap, drawPath, updateForObject, getMap
+  initMap, drawPath, updateForObject, getMap, addToMap
 })
 
 onMounted(() => {

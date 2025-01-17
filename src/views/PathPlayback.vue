@@ -28,6 +28,7 @@ const queryPlaybackData = () => {
     let endTime = Math.floor(queryEndTime.value / 1000)
 
     currentStep.value = 0
+    timesteps.value = []
 
     for (let [queryTargetIdentifier, object] of Object.entries(displayingObjects.value)) {
         playbackService.queryObjectPlayback(object.type, queryTargetIdentifier, startTime, endTime).then(
@@ -70,7 +71,7 @@ onMounted(() => {
             <!-- Right -->
             <div class="w-[30%] flex flex-col gap-[20px]">
                 <PlaybackTimeSettings v-model:queryStartTime="queryStartTime" v-model:queryEndTime="queryEndTime"/>
-                <PlaybackObjectSelector v-model:displayingObjects="displayingObjects" v-model:queryTargetIdentifiers="queryTargetIdentifiers" :playbackService="playbackService" />
+                <PlaybackObjectSelector v-model:displayingObjects="displayingObjects" v-model:queryTargetIdentifiers="queryTargetIdentifiers" :playbackService="playbackService" :mapRef="mapRef" />
 
                 <Button
                     icon="pi pi-play"

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 
 const props = defineProps(["timesteps", "displayingObjects", "mapRef"])
 
@@ -16,6 +16,8 @@ const maxStep = computed(() => props.timesteps.length - 1)
 const prevBtnDisable = computed(() => currentStep.value == minStep.value)
 const nextBtnDisable = computed(() => currentStep.value == maxStep.value)
 
+const isPaused = ref(true)
+
 const previousStep = () => {
     currentStep.value = Math.max(currentStep.value - 1, 0)
 }
@@ -23,6 +25,9 @@ const previousStep = () => {
 const nextStep = () => {
     currentStep.value = Math.min(currentStep.value + 1, props.timesteps.length - 1)
 }
+
+const pause = () => { isPaused.value = true }
+const play = () => { isPaused.value = false }
 
 const updateMapNodes = (oldValue, newValue) => {
     for (let [identifier, object] of Object.entries(props.displayingObjects)) {
@@ -49,11 +54,27 @@ watch(currentStep, updateMapNodes)
 defineExpose({
     updateMapNodes
 })
+
+onMounted(() => {
+    setInterval(() => {
+        if (isPaused.value || currentStep.value == maxStep.value)
+            return
+
+        if (props.displayingObjects == {})
+            return
+
+        currentStep.value++
+    }, 1000)
+})
 </script>
 
 <template>
     <div class="flex flex-row items-center gap-[5px]" v-if="props.timesteps.length > 0" >
         <Button icon="pi pi-chevron-left" size="small" @click="previousStep" :disabled="prevBtnDisable"></Button>
+
+        <Button v-if="isPaused" icon="pi pi-play" size="small" @click="play"></Button>
+        <Button v-else icon="pi pi-pause" size="small" @click="pause"></Button>
+
         <Button icon="pi pi-chevron-right" size="small" @click="nextStep" :disabled="nextBtnDisable"></Button>
         <Slider v-model="currentStep" :min="minStep" :max="maxStep" class="w-full ml-[20px]" />
     </div>
